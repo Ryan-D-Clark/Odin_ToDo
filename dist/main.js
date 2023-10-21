@@ -1,0 +1,1 @@
+(()=>{let e=document.getElementById("burger-icon"),t=document.getElementById("side-nav"),d=!1;e.addEventListener("click",(function(){0==d?(document.body.style.marginLeft="300px",t.style.width="300px",d=!0,t.style.display="block"):(document.body.style.marginLeft="0px",t.style.width="0px",d=!1,t.style.display="None")}))})();
