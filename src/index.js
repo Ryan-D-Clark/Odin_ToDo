@@ -1,6 +1,18 @@
 let burgerIcon = document.getElementById("burger-icon")
 let sideNav = document.getElementById("side-nav")
 let sideNavDisplayed = false
+let createProject = document.getElementById("plus")
+
+let formContainer = document.getElementById("form-container")
+
+createProject.addEventListener("click", function(){
+    if(formContainer.style.display == ""){
+        formContainer.style.display = "block"
+    }
+    else{
+        formContainer.style.display = ""
+    }
+})
 
 burgerIcon.addEventListener("click", function(){
     if(sideNavDisplayed == false){
