@@ -4,29 +4,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>To-Do App</title>
     <script src="main.js" defer></script>
     <script src="https://kit.fontawesome.com/5c30b5e5d4.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="form-container">
-        <form action="/" id="form-popup">
-            <h1 id="form-title">Create A New Project</h1>
+        
+    <dialog id="project-form">
+        <h2 id="form-title">Set up a new project</h2>
 
-            <label for="email"><b>Project Title</b></label>
-            <br>
-            <input type="text" placeholder="Enter Email" name="email" required>
-            <br>
-            <label for="psw"><b>Priority</b></label>
-            <br>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-            <br>
-            <label for="due-date"><b>Due Date</b></label>
-            <br>
-            <input type="date" name="due-date" required>
-        </form>
-    </div>
+        <label for="pname">Project Name:</label>
+        <input type="text" id="pname" name="pname"><br><br>
+
+        <label for="ppriority">Project Priority:</label>
+        <select name="ppriority" id="ppriority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+
+        <label for="pdate">Due Date:</label>
+        <input type="date" id="pdate" name="pdate"><br><br>
+
+        <label for="pdescription">Description:</label><br>
+        <input type="textarea" id="pdescription" name="pdescription"><br><br>
+
+        <fieldset id="task-container">
+            <legend>Tasks</legend>
+            <div id="task-creator">
+                <input maxlength="40" type="text" id="task-name" placeholder="Name..">
+                <button id="task-add">Add</button>
+            </div>
+            <ul id="task-list">
+
+            </ul>
+        </fieldset>
+
+        <br>
+
+        <button id="form-close" autofocus>Close</button>
+        <button id="create-project">Create</button>
+    </dialog>
+
 
     <div id="nav">
         <div id="burger"><i id="burger-icon" class="fa-solid fa-bars" style="color: #ffffff;"></i></div>
@@ -36,35 +56,16 @@
     </div>
 
     <div id="side-nav">
-        <div class="side-title" id="side-home"><h2>Home</h2></div>
+        <div class="side-title" id="side-projects"><h2>All Projects</h2></div>
         <div class="side-title" id="side-today"><h2>Today</h2></div>
         <div class="side-title" id="side-weekly"><h2>Weekly</h2></div>
         <div class="side-title" id="side-tasks"><h2>All Tasks</h2></div>
     </div>
 
     <main id="content">
-        <div id="home-title">All Projects</div>
-        <div id="stat-container">
-            <div class="stat" id="to-do">
-                <p class="stat-title">To Do</p>
-                <div class="projects-container">
-                    <div class="project">Test</div>
-                    <div class="project">Test</div>
-                </div>
-            </div>
-            <div class="stat" id="doing">
-                <p class="stat-title">Doing</p>
-                <div class="projects-container">
-                    <div class="project">Test</div>
-                    <div class="project">Test</div>
-                </div>
-            </div>
-            <div class="stat" id="completed">
-                <p class="stat-title">Completed</p>
-                <div class="projects-container">
-                    <div class="project">Test</div>
-                </div>
-            </div>
+        <h1 id="content-title">All Projects</h1>
+        <div id="content-container">
+            
         </div>
     </main>
 
