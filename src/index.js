@@ -1,39 +1,54 @@
-import { displayProjects, retrieveProjects, Project } from "./projectController"
+import { displayProjects, retrieveProjects, Project, newProject, displayToday } from "./projectController"
 
 export let projectsArray = retrieveProjects()
 displayProjects(projectsArray)
 
 let burgerIcon = document.getElementById("burger-icon")
+let nav = document.getElementById("nav")
 let sideNav = document.getElementById("side-nav")
 let sideNavDisplayed = false
-let createProject = document.getElementById("plus")
+let displayProject = document.getElementById("plus")
+
+let sideProjects = document.getElementById("side-projects")
+let sideToday = document.getElementById("side-today")
+let sideWeekly = document.getElementById("side-weekly")
+let sideTasks = document.getElementById("side-tasks")
 
 let projectForm = document.getElementById("project-form")
 let taskName = document.getElementById("task-name")
 let taskAdd = document.getElementById("task-add")
 let taskList = document.getElementById("task-list")
 let formClose = document.getElementById("form-close")
+let createProject = document.getElementById("create-project")
 
-createProject.addEventListener("click", function(){
-    console.log("Testing again and again")
+displayProject.addEventListener("click", function(){
     projectForm.showModal()
 })
 
+createProject.addEventListener("click", function(){
+    newProject()
+    projectForm.close()
+})
+
 taskAdd.addEventListener("click", function(){
-    console.log(`${taskName.value}`)
     if(taskName.value == ""){
         alert("Task cannot be empty")
+        return
     }else{
         let task = document.createElement("li")
+        task.classList.add("incomplete-task")
         let remove = document.createElement("span")
         remove.innerHTML = "x"
         remove.className = "remove"
         task.textContent = taskName.value
         task.addEventListener("click", function(){
-            if(task.className == "checked"){
-                task.className = ""
-            }else{
-                task.className = "checked"
+            if(task.classList.contains("incomplete-task")){
+                task.classList.remove("incomplete-task")
+                task.classList.add("completed-task")
+            }
+            else{
+                task.classList.remove("completed-task")
+                task.classList.add("incomplete-task")
             }
         })
         remove.addEventListener("click", function(){
@@ -47,44 +62,26 @@ taskAdd.addEventListener("click", function(){
 })
 
 formClose.addEventListener("click", function(){
-    console.log("Test close")
     projectForm.close()
 })
 
 burgerIcon.addEventListener("click", function(){
     if(sideNavDisplayed == false){
-        sideNav.style.borderRight = "1px solid #000000"
-        document.body.style.marginLeft = "300px"
-        sideNav.style.width = "300px"
+        nav.style.width = "80%"
+        sideNav.style.borderRight = "0.5px solid grey"
+        document.body.style.marginLeft = "20%"
+        sideNav.style.width = "20%"
         sideNavDisplayed = true
     }
     else{
+        nav.style.width = "100%"
         sideNav.style.borderRight = ""
-        document.body.style.marginLeft = "0px"
-        sideNav.style.width = "0px"
+        document.body.style.marginLeft = "0"
+        sideNav.style.width = "0"
         sideNavDisplayed = false
     }
 })
 
-
-
-let test = new Project("test","high", "99999", "gdksgndk", ["One", "Two", "Three"], ["Five"])  // Tasks in arrays when creating the objects/when dialog is finished
-console.log(Object.keys(localStorage).length)
-localStorage.setItem(Object.keys(localStorage).length, JSON.stringify(test))
-projectsArray.push(test)
-displayProjects(projectsArray)
-// // add project to an array
-
-// let newTest = JSON.stringify(test) // Loop through project array and stringify to local storage with set item
-
-
-// console.log(JSON.parse(newTest).checkedTasks)
-
-// localStorage.setItem("2", newTest)
-
-// const keys = Object.keys(localStorage)
-// for (let key of keys) {
-//   console.log(`${key}: ${localStorage.getItem(key)}`) // needs to be parsed before object is created
-// }
-
-// // will need to loop through all objects and create html elements on start and then within a function for every time a project is created
+sideToday.addEventListener("click", function(){
+    displayToday()
+})

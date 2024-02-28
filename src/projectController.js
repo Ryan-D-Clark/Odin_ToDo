@@ -3,11 +3,19 @@ import { projectsArray } from ".";
 let contentContainer = document.getElementById("content-container")
 let refresh = document.getElementById("refresh")
 
+let formInputName = document.getElementById("pname")
+let formInputPriority = document.getElementById("ppriority")
+let formInputDate = document.getElementById("pdate")
+let formInputDescription = document.getElementById("pdescription")
+let formCompletedTaskList = document.getElementsByClassName("completed-task")
+let formIncompleteTaskList = document.getElementsByClassName("incomplete-task")
+
 refresh.addEventListener("click", function(){
-    for(let i in projectsArray){
-        localStorage.setItem(i,JSON.stringify(projectsArray[i]))
-        displayProjects(projectsArray)
+    console.log(projectsArray)
+    for(let i = 0; i < projectsArray.length; i++){
+        localStorage.setItem(i, JSON.stringify(projectsArray[i]))
     }
+    retrieveProjects(projectsArray)
 })
 
 export class Project{
@@ -22,21 +30,42 @@ export class Project{
     }
 }
 
-// Need to create new object after create button has been pressed and then add it to the array and local storage with it keeping track of key IDs
+
+export function newProject(){
+
+    let completedTasksList = []
+    let incompleteTasksList = []
+
+    for(let i = 0; i <= formCompletedTaskList.length -1 ; i++){
+        completedTasksList.push(formCompletedTaskList[i].childNodes[0].nodeValue)
+    }
+    for(let i = 0; i <= formIncompleteTaskList.length -1 ; i++){
+        incompleteTasksList.push(formIncompleteTaskList[i].childNodes[0].nodeValue)
+    }
+
+    let project = new Project(formInputName.value, formInputPriority.value, formInputDate.value, formInputDescription.value, completedTasksList, incompleteTasksList)
+    let keys = Object.keys(localStorage)
+
+    localStorage.setItem(keys.length, JSON.stringify(project))
+    displayProjects(retrieveProjects())
+}
+
 
 export function retrieveProjects(){
     const newArray = []
     let keys = Object.keys(localStorage)
+    keys.reverse()
+    console.log(keys)
     for(let i of keys){
         newArray.push(JSON.parse(localStorage.getItem(i)))
     }
+    console.log(newArray)
     return newArray
 }
 
 export function displayProjects(array){
     contentContainer.innerHTML = ""
     for(let i in array){
-        console.log(array[i]["name"])
         let project = document.createElement("div")
         project.classList.add("project")
         switch (array[i]["priority"]){
@@ -75,6 +104,21 @@ export function displayProjects(array){
         checkedContainer.id = "checked-container"
         for(let x in array[i]["checkedTasks"]){
             let task = document.createElement("div")
+            let taskText = array[i]["checkedTasks"][x]
+            task.addEventListener("click", function(){
+                if(task.parentNode.id == "unchecked-container"){
+                    checkedContainer.append(task)
+                    array[i]["checkedTasks"].push(taskText)
+                    array[i]["tasks"] = array[i]["tasks"].filter(item => item !== taskText)
+                }else{
+                    uncheckedContainer.append(task)
+                    array[i]["tasks"].push(taskText)
+                    array[i]["checkedTasks"] = array[i]["checkedTasks"].filter(item => item !== taskText)
+                
+                }
+                console.log(array[i])
+
+            })
             task.classList.add("task")
             task.innerText = array[i]["checkedTasks"][x]
             checkedContainer.appendChild(task)
@@ -85,17 +129,23 @@ export function displayProjects(array){
         text.innerText = "Uncompleted Tasks:"
         text.className = "text-title"
         project.appendChild(text)
-
         let uncheckedContainer = document.createElement("div")
         uncheckedContainer.id = "unchecked-container"
         for(let x in array[i]["tasks"]){
             let task = document.createElement("div")
+            let taskText = array[i]["tasks"][x]
             task.addEventListener("click", function(){
-                task.classList.add("checked-task")
-                array[i]["checkedTasks"].push(array[i]["tasks"][x])
-                array[i]["tasks"] = array[i]["tasks"].filter(item => item !== array[i]["tasks"][x])
-
+                if(task.parentNode.id == "checked-container"){
+                    uncheckedContainer.append(task)
+                    array[i]["tasks"].push(taskText)
+                    array[i]["checkedTasks"] = array[i]["checkedTasks"].filter(item => item !== taskText)
+                }else{
+                    checkedContainer.append(task)
+                    array[i]["checkedTasks"].push(taskText)
+                    array[i]["tasks"] = array[i]["tasks"].filter(item => item !== taskText)
                 
+                }
+                console.log(array[i])
             })
             task.classList.add("task")
             task.innerText = array[i]["tasks"][x]
@@ -106,4 +156,9 @@ export function displayProjects(array){
         contentContainer.appendChild(project)
     }
     
+}
+
+export function displayToday(){
+    contentContainer.innerHTML = ""
+    console.log(projectsArray)
 }
