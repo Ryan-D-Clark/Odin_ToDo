@@ -1,4 +1,6 @@
 import { projectsArray } from ".";
+import {format} from "date-fns"
+
 
 let contentContainer = document.getElementById("content-container")
 let refresh = document.getElementById("refresh")
@@ -158,7 +160,101 @@ export function displayProjects(array){
     
 }
 
+function displaySingleProject(projectObject){
+        let project = document.createElement("div")
+        project.classList.add("project")
+        switch (projectObject["priority"]){
+            case "high":
+                project.classList.add("high")
+                break;
+            case "medium":
+                project.classList.add("medium")
+                break;
+            case "low":
+                project.classList.add("low")
+                break;
+}
+        let ptitle = document.createElement("div")
+        ptitle.textContent = projectObject["name"]
+        ptitle.className = "ptitle"
+        project.appendChild(ptitle)
+
+        let pdescription = document.createElement("div")
+        pdescription.textContent = `"${projectObject["description"]}"`
+        pdescription.className = "pdescription"
+        project.appendChild(pdescription)
+
+        let pdate = document.createElement("div")
+        pdate.innerHTML = `<br>Due Date: ${projectObject["date"]}<br>`
+        pdate.className = "pdate"
+        project.appendChild(pdate)
+
+        let text = document.createElement("div")
+        text.innerText = "Completed Tasks:"
+        text.className = "text-title"
+        project.appendChild(text)
+
+        let checkedContainer = document.createElement("div")
+        checkedContainer.id = "checked-container"
+        for(let x in projectObject["checkedTasks"]){
+            let task = document.createElement("div")
+            let taskText = projectObject["checkedTasks"][x]
+            task.addEventListener("click", function(){
+                if(task.parentNode.id == "unchecked-container"){
+                    checkedContainer.append(task)
+                    projectObject["checkedTasks"].push(taskText)
+                    projectObject["tasks"] = projectObject["tasks"].filter(item => item !== taskText)
+                }else{
+                    uncheckedContainer.append(task)
+                    projectObject["tasks"].push(taskText)
+                    projectObject["checkedTasks"] = projectObject["checkedTasks"].filter(item => item !== taskText)
+                
+                }
+            })
+            task.classList.add("task")
+            task.innerText = projectObject["checkedTasks"][x]
+            checkedContainer.appendChild(task)
+        }
+        project.appendChild(checkedContainer)
+
+        text = document.createElement("div")
+        text.innerText = "Uncompleted Tasks:"
+        text.className = "text-title"
+        project.appendChild(text)
+        let uncheckedContainer = document.createElement("div")
+        uncheckedContainer.id = "unchecked-container"
+        for(let x in projectObject["tasks"]){
+            let task = document.createElement("div")
+            let taskText = projectObject["tasks"][x]
+            task.addEventListener("click", function(){
+                if(task.parentNode.id == "checked-container"){
+                    uncheckedContainer.append(task)
+                    projectObject["tasks"].push(taskText)
+                    projectObject["checkedTasks"] = projectObject["checkedTasks"].filter(item => item !== taskText)
+                }else{
+                    checkedContainer.append(task)
+                    projectObject["checkedTasks"].push(taskText)
+                    projectObject["tasks"] = projectObject["tasks"].filter(item => item !== taskText)
+                
+                }
+            })
+            task.classList.add("task")
+            task.innerText = projectObject["tasks"][x]
+            uncheckedContainer.appendChild(task)
+        }
+        project.appendChild(uncheckedContainer)
+
+        contentContainer.appendChild(project)
+}
+
 export function displayToday(){
     contentContainer.innerHTML = ""
-    console.log(projectsArray)
+    console.log(projectsArray[0]["date"])
+    console.log("Todays date", format(new Date(), 'yyyy-MM-dd'))
+    for(let x in projectsArray){
+        if(projectsArray[x]["date"] == format(new Date(), 'yyyy-MM-dd')){
+            displaySingleProject(projectsArray[x])
+        }
+    }
+
 }
