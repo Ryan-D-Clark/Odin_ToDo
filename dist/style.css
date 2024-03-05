@@ -6,9 +6,19 @@ html, body{
     color: #ffffff;
     font-family: Montserrat;
     font-weight: bold;
-    transition: 1000ms;
-    transition-delay: 100ms;
     height: 100%;
+}
+
+#task-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+    padding: 10px;
+}
+
+.displayed-task{
+    background-color: #0c0c0c;
 }
 
 .project{
@@ -178,7 +188,6 @@ ul li:hover{
     width: 100%;
     flex-direction: row;
     background-color: #2c2e30;
-    transition: 0s;
     padding: 10px 0px;
 }
 
@@ -219,7 +228,6 @@ ul li:hover{
     width: 0px;
     position: fixed;
     z-index: 1;
-    transition: 500ms;
     top: 0;
     left: 0;
     padding-top: 50px;

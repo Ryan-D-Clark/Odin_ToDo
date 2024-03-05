@@ -1,6 +1,11 @@
-import { displayProjects, retrieveProjects, Project, newProject, displayToday } from "./projectController"
+import { displayProjects, retrieveProjects, Project, newProject, displayToday, displayWeekly, displayAllTasks, createDefaultProjects } from "./projectController"
 
 export let projectsArray = retrieveProjects()
+if(projectsArray.length == 0){
+    createDefaultProjects()
+    projectsArray = retrieveProjects()
+
+}
 displayProjects(projectsArray)
 
 let burgerIcon = document.getElementById("burger-icon")
@@ -13,6 +18,7 @@ let sideProjects = document.getElementById("side-projects")
 let sideToday = document.getElementById("side-today")
 let sideWeekly = document.getElementById("side-weekly")
 let sideTasks = document.getElementById("side-tasks")
+let contentTitle = document.getElementById("content-title")
 
 let projectForm = document.getElementById("project-form")
 let taskName = document.getElementById("task-name")
@@ -84,4 +90,27 @@ burgerIcon.addEventListener("click", function(){
 
 sideToday.addEventListener("click", function(){
     displayToday()
+    contentTitle.innerText = "Today's Projects"
+    burgerIcon.click()
+})
+
+sideProjects.addEventListener("click", function(){
+    displayProjects(projectsArray)
+    contentTitle.innerText = "All Projects"
+    burgerIcon.click()
+
+})
+
+sideWeekly.addEventListener("click", function(){
+    displayWeekly()
+    contentTitle.innerText = "Weekly Projects"
+    burgerIcon.click()
+
+})
+
+sideTasks.addEventListener("click", function(){
+    displayAllTasks()
+    contentTitle.innerText = "All Tasks"
+    burgerIcon.click()
+
 })

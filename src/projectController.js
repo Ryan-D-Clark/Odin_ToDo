@@ -1,5 +1,5 @@
 import { projectsArray } from ".";
-import {format} from "date-fns"
+import {format,getDate,isSame, isSameWeek, isThisWeek, } from "date-fns"
 
 
 let contentContainer = document.getElementById("content-container")
@@ -13,7 +13,6 @@ let formCompletedTaskList = document.getElementsByClassName("completed-task")
 let formIncompleteTaskList = document.getElementsByClassName("incomplete-task")
 
 refresh.addEventListener("click", function(){
-    console.log(projectsArray)
     for(let i = 0; i < projectsArray.length; i++){
         localStorage.setItem(i, JSON.stringify(projectsArray[i]))
     }
@@ -32,6 +31,14 @@ export class Project{
     }
 }
 
+export function createDefaultProjects(){
+    let project = new Project("Clean House", "low", format(new Date(), 'yyyy-MM-dd'), "A Project that is set for today", ["Hoover Stairs", "Clean bathroom"], ["Cut grass", "Wash pots", "Tidy bedroom"])
+    let projectDaily = new Project("Make Salt & Pepper Chips", "high", format(new Date(), 'yyyy-MM-dd'), "A Project that is set for today", ["Buy ingredients", "Prepare Vegetables", "Put chips in airfryer"], ["Start cooking"])
+    let projectWeekly = new Project("Finish Project", "medium", "2024-01-11", "A Project that is set to test the week", ["Finish Code", "Delete lots of code"], ["Upload to GitHub"])
+    localStorage.setItem(0,JSON.stringify(project))
+    localStorage.setItem(1,JSON.stringify(projectDaily))
+    localStorage.setItem(2,JSON.stringify(projectWeekly))
+}
 
 export function newProject(){
 
@@ -249,12 +256,65 @@ function displaySingleProject(projectObject){
 
 export function displayToday(){
     contentContainer.innerHTML = ""
-    console.log(projectsArray[0]["date"])
-    console.log("Todays date", format(new Date(), 'yyyy-MM-dd'))
     for(let x in projectsArray){
         if(projectsArray[x]["date"] == format(new Date(), 'yyyy-MM-dd')){
             displaySingleProject(projectsArray[x])
         }
     }
 
+}
+
+export function displayWeekly(){
+    contentContainer.innerHTML = ""
+    for(let x in projectsArray){
+        if(isSameWeek(projectsArray[x]["date"], format(new Date(), 'yyyy-MM-dd'))){
+            displaySingleProject(projectsArray[x])
+        }
+    }
+}
+
+export function displayAllTasks(){
+    contentContainer.innerHTML = ""
+    let taskContainer = document.createElement("div")
+    taskContainer.id = "task-container"
+    contentContainer.appendChild(taskContainer)
+    for(let x in projectsArray){
+        for(let task in projectsArray[x]["checkedTasks"]){
+            let newTask = document.createElement("div")
+            newTask.classList.add("displayed-task", "checked-task")
+            newTask.innerText = projectsArray[x]["checkedTasks"][task]
+            console.log(projectsArray[x]["priority"])
+            switch (projectsArray[x]["priority"]){
+                case "high":
+                    newTask.classList.add("high")
+                    break;
+                case "medium":
+                    newTask.classList.add("medium")
+                    break;
+                case "low":
+                    newTask.classList.add("low")
+                    break;
+    }
+
+            taskContainer.appendChild(newTask)
+        }
+        for(let task in projectsArray[x]["tasks"]){
+            let newTask = document.createElement("div")
+            newTask.classList.add("displayed-task")
+            newTask.innerText = projectsArray[x]["tasks"][task]
+            switch (projectsArray[x]["priority"]){
+                case "high":
+                    newTask.classList.add("high")
+                    break;
+                case "medium":
+                    newTask.classList.add("medium")
+                    break;
+                case "low":
+                    newTask.classList.add("low")
+                    break;
+    }
+
+            taskContainer.appendChild(newTask)
+        }
+    }
 }
